@@ -1,9 +1,10 @@
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
@@ -12,7 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const winston_transport_1 = __importDefault(require("winston-transport"));
-const request_promise_native_1 = __importDefault(require("request-promise-native"));
+const superagent_1 = __importDefault(require("superagent"));
 const os_1 = __importDefault(require("os"));
 /**
  * Nextabit's Discord Transport for winston
@@ -31,9 +32,11 @@ class DiscordTransport extends winston_transport_1.default {
                     json: true
                 };
                 try {
-                    const response = yield request_promise_native_1.default(opts);
-                    this.id = response.id;
-                    this.token = response.token;
+                    const response = yield yield superagent_1.default
+                        .get(opts.url)
+                        .set('accept', 'json');
+                    this.id = response.body.id;
+                    this.token = response.body.token;
                     resolve();
                 }
                 catch (err) {
@@ -76,7 +79,11 @@ class DiscordTransport extends winston_transport_1.default {
                 body: postBody
             };
             try {
-                yield request_promise_native_1.default(options);
+                // await request(options);
+                yield superagent_1.default
+                    .post(options.url)
+                    .send(options.body)
+                    .set('accept', 'json');
             }
             catch (err) {
                 console.error('Error sending to discord');
@@ -87,14 +94,17 @@ class DiscordTransport extends winston_transport_1.default {
         this.initialize();
     }
     log(info, callback) {
-        setImmediate(() => {
-            this.initialized.then(() => {
-                this.sendToDiscord(info);
-            }).catch(err => { });
-        });
+        if (info.discord !== false) {
+            setImmediate(() => {
+                this.initialized.then(() => {
+                    this.sendToDiscord(info);
+                }).catch(err => { });
+            });
+        }
         callback();
     }
 }
+exports.default = DiscordTransport;
 DiscordTransport.COLORS = {
     error: 14362664,
     warn: 16497928,
@@ -103,5 +113,4 @@ DiscordTransport.COLORS = {
     debug: 2196944,
     silly: 2210373,
 };
-exports.default = DiscordTransport;
 //# sourceMappingURL=index.js.map
