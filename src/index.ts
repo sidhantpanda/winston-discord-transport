@@ -1,5 +1,5 @@
 import Transport, { TransportStreamOptions } from 'winston-transport';
-import request from 'request-promise-native';
+import request from 'superagent';
 import os from 'os';
 
 /**
@@ -54,9 +54,12 @@ export default class DiscordTransport extends Transport {
         json: true
       };
       try {
-        const response = await request(opts);
-        this.id = response.id;
-        this.token = response.token;
+        const response = await await request
+          .get(opts.url)
+          .set('accept', 'json');
+
+        this.id = response.body.id;
+        this.token = response.body.token;
         resolve();
       } catch (err) {
         console.error(`Could not connect to Discord Webhook at ${this.webhook}`);
@@ -66,11 +69,13 @@ export default class DiscordTransport extends Transport {
   }
 
   log(info: any, callback: { (): void }) {
-    setImmediate(() => {
-      this.initialized.then(() => {
-        this.sendToDiscord(info);
-      }).catch(err => { });
-    });
+    if (info.discord !== false) {
+      setImmediate(() => {
+        this.initialized.then(() => {
+          this.sendToDiscord(info);
+        }).catch(err => { });
+      });
+    }
 
     callback();
   }
@@ -114,7 +119,12 @@ export default class DiscordTransport extends Transport {
     };
 
     try {
-      await request(options);
+      // await request(options);
+      await request
+        .post(options.url)
+        .send(options.body)
+        .set('accept', 'json');
+
     } catch (err) {
       console.error('Error sending to discord');
     }
