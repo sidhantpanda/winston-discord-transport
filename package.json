@@ -1,10 +1,12 @@
 {
   "name": "winston-discord-transport",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "A Discord transport for winston logger",
   "main": "dist/index.js",
   "scripts": {
-    "build-ts": "tsc",
+    "clean": "rm -rf dist",
+    "build-ts": "tsc --declaration",
+    "prebuild": "npm run clean",
     "build": "npm run build-ts && npm run tslint",
     "tslint": "tslint -c tslint.json -p tsconfig.json",
     "test": "echo \"Error: no test specified\" && exit 1"
