@@ -1,6 +1,6 @@
 {
   "name": "winston-discord-transport",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A Discord transport for winston logger",
   "main": "dist/index.js",
   "scripts": {
