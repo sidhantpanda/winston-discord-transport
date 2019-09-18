@@ -22,10 +22,12 @@ export default class DiscordTransport extends Transport {
   private id: string;
   /** Discord webhook token */
   private token: string;
+  /** Initialization promise resolved after retrieving discord id and token */
   private initialized: Promise<void>;
   /** Meta data to be included inside Discord Message */
   private defaultMeta: { [key: string]: string };
 
+  /** Available colors for discord messages */
   private static COLORS: { [key: string]: number } = {
     error: 14362664, // #db2828
     warn: 16497928, // #fbbd08
@@ -42,10 +44,14 @@ export default class DiscordTransport extends Transport {
     this.initialize();
   }
 
+  /** Helper function to retrieve url */
   private getUrl = () => {
     return `https://discordapp.com/api/v6/webhooks/${this.id}/${this.token}`;
   }
 
+  /**
+   * Initialize the transport to fetch Discord id and token
+   */
   private initialize = () => {
     this.initialized = new Promise(async (resolve, reject) => {
       const opts = {
@@ -68,6 +74,11 @@ export default class DiscordTransport extends Transport {
     });
   }
 
+  /**
+   * Function exposed to winston to be called when logging messages
+   * @param info Log message from winston
+   * @param callback Callback to winston to complete the log
+   */
   log(info: any, callback: { (): void }) {
     if (info.discord !== false) {
       setImmediate(() => {
@@ -80,6 +91,9 @@ export default class DiscordTransport extends Transport {
     callback();
   }
 
+  /**
+   * Sends log message to discord
+   */
   private sendToDiscord = async (info: any) => {
     const postBody = {
       content: undefined as string,
