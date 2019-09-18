@@ -19,7 +19,7 @@ A custom winston transport for Discord.
 This library serves as a [`Transport`](https://github.com/winstonjs/winston#transports) for [winston](https://github.com/winstonjs/winston), a popular Nodejs logging library.
 
 ## Features
-1. Sends complete error stack to discord (see screenshot below)
+1. Sends complete **error stack** to discord (see screenshot below)
 2. Color codes messages based on log level. Errors are red!
 3. Includes information about host machine to pin point source of message.
 4. Add any other meta data you want to see in Discord.
@@ -55,7 +55,7 @@ logger.log({
 
 #### Selectively skip a particular message from being sent to Discord
 There might be some log messages which you might want to raise to a file or console, but not flood your Discord channel.
-For such message, just include `discord: false` as a key-value in the log message the the transport will drop the message from being sent to Discord.
+For such message, just include `discord: false` as a key-value in the log message and the transport will drop the message from being sent to Discord.
 
 ```javascript
 logger.log({
