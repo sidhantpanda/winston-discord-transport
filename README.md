@@ -40,7 +40,7 @@ const logger = winston.createLogger({
   transports: [
     new DiscordTransport({
       webhook: 'https:/your/discord/webhook',
-      defaultMeta: { service: 'my_node_service' }
+      defaultMeta: { service: 'my_node_service' },
       level: 'warn'
     })
   ],
@@ -48,7 +48,7 @@ const logger = winston.createLogger({
 
 logger.log({
   level: 'error',
-  message: 'Error intializing service'
+  message: 'Error intializing service',
   error: new Error()
 });
 ```
