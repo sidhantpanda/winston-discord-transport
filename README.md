@@ -18,33 +18,52 @@ A custom winston transport for Discord.
 
 This library serves as a [`Transport`](https://github.com/winstonjs/winston#transports) for [winston](https://github.com/winstonjs/winston), a popular Nodejs logging library.
 
+## Features
+1. Sends complete error stack to discord (see screenshot below)
+2. Color codes messages based on log level. Errors are red!
+3. Includes information about host machine to pin point source of message.
+4. Add any other meta data you want to see in Discord.
+
 ## Installation
-1. Add as a dependency
 ```
-{
-  ...
-  "dependencies": {
-    "winston-discord-transport": "git+ssh://git@git.nextabit.com:nxtbt/winston-discord-transport.git"
-  },
-  ...
-}
+$ npm i winston-discord-transport
 ```
-2. Run `npm install`
 
 ## Usage
-Include in project and use with [`winston`](https://github.com/winstonjs/winston).
 
+#### Add as a transport
 ```javascript
-import DiscordTransport from 'winston-discord-transport';
 import winston from 'winston';
+import DiscordTransport from 'winston-discord-transport';
 
 const logger = winston.createLogger({
   transports: [
     new DiscordTransport({
       webhook: 'https:/your/discord/webhook',
       defaultMeta: { service: 'my_node_service' }
+      level: 'warn'
     })
   ],
 });
+
+logger.log({
+  level: 'error',
+  message: 'Error intializing service'
+  error: new Error()
+});
 ```
 
+#### Selectively skip a particular message from being sent to Discord
+There might be some log messages which you might want to raise to a file or console, but not flood your Discord channel.
+For such message, just include `discord: false` as a key-value in the log message the the transport will drop the message from being sent to Discord.
+
+```javascript
+logger.log({
+  level: 'warn',
+  message: 'Some warning message to not send to discord',
+  discord: false
+});
+```
+
+#### Screenshots
+<img src="https://i.ibb.co/vQLY91R/Screenshot-2019-09-18-at-6-33-03-PM.png" alt="Error message screenshot" />
