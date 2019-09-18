@@ -1,0 +1,8 @@
+language: node_js
+node_js:
+  - 10
+jobs:
+  include:
+    - stage: 'Run typescript build'
+      name: 'Run typescript build'
+      script: npm run build
