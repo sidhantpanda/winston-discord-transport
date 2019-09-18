@@ -1,6 +1,6 @@
 {
   "name": "winston-discord-transport",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "A Discord transport for winston logger",
   "main": "dist/index.js",
   "scripts": {
@@ -18,7 +18,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@git.nextabit.com:nxtbt/winston-discord-transport.git"
+    "url": "git@github.com:sidhantpanda/winston-discord-transport.git"
   },
   "keywords": [
     "discord",
@@ -27,10 +27,14 @@
     "logger"
   ],
   "author": "Sidhant Panda",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "logform": "2.1.2",
     "superagent": "5.1.0",
     "winston-transport": "4.3.0"
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/sidhantpanda/winston-discord-transport/issues"
+  },
+  "homepage": "https://github.com/sidhantpanda/winston-discord-transport#readme"
 }
