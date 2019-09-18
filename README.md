@@ -66,4 +66,20 @@ logger.log({
 ```
 
 #### Screenshots
-<img src="https://i.ibb.co/vQLY91R/Screenshot-2019-09-18-at-6-33-03-PM.png" alt="Error message screenshot" />
+##### Error message
+<img src="https://i.ibb.co/nsQR12X/Screenshot-2019-09-18-at-7-04-59-PM.png" alt="Error message screenshot" >
+
+##### Warning message
+<img src="https://i.ibb.co/TrFspkw/Screenshot-2019-09-18-at-7-05-30-PM.png" alt="Warning message screenshot" >
+
+##### Info message
+<img src="https://i.ibb.co/7ygj3Y9/Screenshot-2019-09-18-at-7-05-24-PM.png" alt="Info message screenshot" >
+
+##### Verbose message
+<img src="https://i.ibb.co/55p3tMX/Screenshot-2019-09-18-at-7-05-19-PM.png" alt="Verbose message screenshot" >
+
+##### Debug message
+<img src="https://i.ibb.co/8cbfxPP/Screenshot-2019-09-18-at-7-05-13-PM.png" alt="Debug message screenshot" >
+
+##### Silly message
+<img src="https://i.ibb.co/ZfrGPbF/Screenshot-2019-09-18-at-7-05-08-PM.png" alt="Silly message screenshot" >
