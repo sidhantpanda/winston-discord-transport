@@ -1,10 +1,10 @@
 <!-- Dependency Status -->
 <a href="https://david-dm.org/sidhantpanda/winston-discord-transport">
-  <img src="https://david-dm.org/flexdinesh/react-redux-boilerplate.svg" alt="Dependency Status" />
+  <img src="https://david-dm.org/sidhantpanda/winston-discord-transport.svg" alt="Dependency Status" />
 </a>
 <!-- devDependency Status -->
 <a href="https://david-dm.org/sidhantpanda/winston-discord-transport#info=devDependencies">
-  <img src="https://david-dm.org/flexdinesh/react-redux-boilerplate/dev-status.svg" alt="devDependency Status" />
+  <img src="https://david-dm.org/sidhantpanda/winston-discord-transport/dev-status.svg" alt="devDependency Status" />
 </a>
 <a href="https://travis-ci.org/sidhantpanda/winston-discord-transport">
   <img src="https://travis-ci.org/sidhantpanda/winston-discord-transport.svg?branch=master" alt="Build Status" />
