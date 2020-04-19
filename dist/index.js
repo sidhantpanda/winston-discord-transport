@@ -21,9 +21,13 @@ const os_1 = __importDefault(require("os"));
 class DiscordTransport extends winston_transport_1.default {
     constructor(opts) {
         super(opts);
+        /** Helper function to retrieve url */
         this.getUrl = () => {
             return `https://discordapp.com/api/v6/webhooks/${this.id}/${this.token}`;
         };
+        /**
+         * Initialize the transport to fetch Discord id and token
+         */
         this.initialize = () => {
             this.initialized = new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
                 const opts = {
@@ -45,6 +49,9 @@ class DiscordTransport extends winston_transport_1.default {
                 }
             }));
         };
+        /**
+         * Sends log message to discord
+         */
         this.sendToDiscord = (info) => __awaiter(this, void 0, void 0, function* () {
             const postBody = {
                 content: undefined,
@@ -93,6 +100,11 @@ class DiscordTransport extends winston_transport_1.default {
         this.defaultMeta = opts.defaultMeta;
         this.initialize();
     }
+    /**
+     * Function exposed to winston to be called when logging messages
+     * @param info Log message from winston
+     * @param callback Callback to winston to complete the log
+     */
     log(info, callback) {
         if (info.discord !== false) {
             setImmediate(() => {
@@ -105,6 +117,7 @@ class DiscordTransport extends winston_transport_1.default {
     }
 }
 exports.default = DiscordTransport;
+/** Available colors for discord messages */
 DiscordTransport.COLORS = {
     error: 14362664,
     warn: 16497928,
