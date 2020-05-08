@@ -49,6 +49,9 @@ const logger = winston.createLogger({
 logger.log({
   level: 'error',
   message: 'Error intializing service',
+  meta: {
+    additionalKey: 'someValue'
+  },
   error: new Error()
 });
 ```
