@@ -29,25 +29,24 @@ class DiscordTransport extends winston_transport_1.default {
          * Initialize the transport to fetch Discord id and token
          */
         this.initialize = () => {
-            this.initialized = new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
+            this.initialized = new Promise((resolve, reject) => {
                 const opts = {
                     url: this.webhook,
                     method: 'GET',
                     json: true
                 };
-                try {
-                    const response = yield yield superagent_1.default
-                        .get(opts.url)
-                        .set('accept', 'json');
+                superagent_1.default
+                    .get(opts.url)
+                    .set('accept', 'json')
+                    .then(response => {
                     this.id = response.body.id;
                     this.token = response.body.token;
                     resolve();
-                }
-                catch (err) {
+                }).catch(err => {
                     console.error(`Could not connect to Discord Webhook at ${this.webhook}`);
                     reject(err);
-                }
-            }));
+                });
+            });
         };
         /**
          * Sends log message to discord
@@ -63,17 +62,23 @@ class DiscordTransport extends winston_transport_1.default {
                     }]
             };
             if (info.level === 'error' && info.error && info.error.stack) {
-                postBody.content = '```' + info.error.stack + '```';
+                postBody.content = `\`\`\`${info.error.stack}\`\`\``;
             }
             if (this.defaultMeta) {
-                for (const key in this.defaultMeta) {
-                    if (this.defaultMeta.hasOwnProperty(key)) {
-                        postBody.embeds[0].fields.push({
-                            name: key,
-                            value: this.defaultMeta[key]
-                        });
-                    }
-                }
+                Object.keys(this.defaultMeta).forEach(key => {
+                    postBody.embeds[0].fields.push({
+                        name: key,
+                        value: this.defaultMeta[key]
+                    });
+                });
+            }
+            if (info.meta) {
+                Object.keys(info.meta).forEach(key => {
+                    postBody.embeds[0].fields.push({
+                        name: key,
+                        value: info.meta[key]
+                    });
+                });
             }
             postBody.embeds[0].fields.push({
                 name: 'Host',
@@ -110,7 +115,9 @@ class DiscordTransport extends winston_transport_1.default {
             setImmediate(() => {
                 this.initialized.then(() => {
                     this.sendToDiscord(info);
-                }).catch(err => { });
+                }).catch(err => {
+                    console.log('Error sending message to discord', err);
+                });
             });
         }
         callback();
