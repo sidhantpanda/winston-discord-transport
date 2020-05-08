@@ -18,12 +18,16 @@ interface DiscordTransportOptions extends TransportStreamOptions {
 export default class DiscordTransport extends Transport {
   /** Webhook obtained from Discord */
   private webhook: string;
+
   /** Discord webhook id */
   private id: string;
+
   /** Discord webhook token */
   private token: string;
+
   /** Initialization promise resolved after retrieving discord id and token */
   private initialized: Promise<void>;
+
   /** Meta data to be included inside Discord Message */
   private defaultMeta: { [key: string]: string };
 
@@ -53,24 +57,23 @@ export default class DiscordTransport extends Transport {
    * Initialize the transport to fetch Discord id and token
    */
   private initialize = () => {
-    this.initialized = new Promise(async (resolve, reject) => {
+    this.initialized = new Promise((resolve, reject) => {
       const opts = {
         url: this.webhook,
         method: 'GET',
         json: true
       };
-      try {
-        const response = await await request
-          .get(opts.url)
-          .set('accept', 'json');
-
-        this.id = response.body.id;
-        this.token = response.body.token;
-        resolve();
-      } catch (err) {
-        console.error(`Could not connect to Discord Webhook at ${this.webhook}`);
-        reject(err);
-      }
+      request
+        .get(opts.url)
+        .set('accept', 'json')
+        .then(response => {
+          this.id = response.body.id;
+          this.token = response.body.token;
+          resolve();
+        }).catch(err => {
+          console.error(`Could not connect to Discord Webhook at ${this.webhook}`);
+          reject(err);
+        });
     });
   }
 
@@ -84,7 +87,9 @@ export default class DiscordTransport extends Transport {
       setImmediate(() => {
         this.initialized.then(() => {
           this.sendToDiscord(info);
-        }).catch(err => { });
+        }).catch(err => {
+          console.log('Error sending message to discord', err);
+        });
       });
     }
 
@@ -106,18 +111,25 @@ export default class DiscordTransport extends Transport {
     };
 
     if (info.level === 'error' && info.error && info.error.stack) {
-      postBody.content = '```' + info.error.stack + '```';
+      postBody.content = `\`\`\`${info.error.stack}\`\`\``;
     }
 
     if (this.defaultMeta) {
-      for (const key in this.defaultMeta) {
-        if (this.defaultMeta.hasOwnProperty(key)) {
-          postBody.embeds[0].fields.push({
-            name: key,
-            value: this.defaultMeta[key]
-          });
-        }
-      }
+      Object.keys(this.defaultMeta).forEach(key => {
+        postBody.embeds[0].fields.push({
+          name: key,
+          value: this.defaultMeta[key]
+        });
+      });
+    }
+
+    if (info.meta) {
+      Object.keys(info.meta).forEach(key => {
+        postBody.embeds[0].fields.push({
+          name: key,
+          value: info.meta[key]
+        });
+      });
     }
 
     postBody.embeds[0].fields.push({
@@ -138,7 +150,6 @@ export default class DiscordTransport extends Transport {
         .post(options.url)
         .send(options.body)
         .set('accept', 'json');
-
     } catch (err) {
       console.error('Error sending to discord');
     }
