@@ -15,7 +15,7 @@ interface DiscordTransportOptions extends TransportStreamOptions {
 /**
  * Nextabit's Discord Transport for winston
  */
-export default class DiscordTransport extends Transport {
+class DiscordTransport extends Transport {
   /** Webhook obtained from Discord */
   private webhook: string;
 
@@ -155,3 +155,5 @@ export default class DiscordTransport extends Transport {
     }
   }
 }
+
+export = DiscordTransport;
