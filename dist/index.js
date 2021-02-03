@@ -56,7 +56,7 @@ class DiscordTransport extends winston_transport_1.default {
                 content: undefined,
                 embeds: [{
                         description: info.message,
-                        color: this.getColor(info.level),
+                        color: this.colors[info.level],
                         fields: [],
                         timestamp: new Date().toISOString(),
                     }]
@@ -103,7 +103,7 @@ class DiscordTransport extends winston_transport_1.default {
         });
         this.webhook = opts.webhook;
         this.defaultMeta = opts.defaultMeta;
-        this.colors = opts.colors;
+        this.colors = opts.colors || DiscordTransport.DEFAULT_COLORS;
         this.initialize();
     }
     /**
@@ -122,10 +122,6 @@ class DiscordTransport extends winston_transport_1.default {
             });
         }
         callback();
-    }
-    getColor(level) {
-        return this.colors && this.colors[level]
-            || DiscordTransport.DEFAULT_COLORS[level];
     }
 }
 exports.default = DiscordTransport;

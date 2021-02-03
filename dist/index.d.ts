@@ -7,6 +7,7 @@ interface DiscordTransportOptions extends TransportStreamOptions {
     webhook: string;
     /** Meta data to be included inside Discord Message */
     defaultMeta: any;
+    /** Optional list of colors to use for discord messages */
     colors?: Colors;
 }
 interface Colors {
@@ -26,6 +27,7 @@ export default class DiscordTransport extends Transport {
     private initialized;
     /** Meta data to be included inside Discord Message */
     private defaultMeta;
+    /** Custom list of colors to use for discord messages */
     private colors;
     /** Available colors for discord messages */
     private static DEFAULT_COLORS;
@@ -48,6 +50,5 @@ export default class DiscordTransport extends Transport {
      * Sends log message to discord
      */
     private sendToDiscord;
-    private getColor;
 }
 export {};
