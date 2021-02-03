@@ -56,7 +56,7 @@ class DiscordTransport extends winston_transport_1.default {
                 content: undefined,
                 embeds: [{
                         description: info.message,
-                        color: DiscordTransport.COLORS[info.level],
+                        color: this.getColor(info.level),
                         fields: [],
                         timestamp: new Date().toISOString(),
                     }]
@@ -103,6 +103,7 @@ class DiscordTransport extends winston_transport_1.default {
         });
         this.webhook = opts.webhook;
         this.defaultMeta = opts.defaultMeta;
+        this.colors = opts.colors;
         this.initialize();
     }
     /**
@@ -122,10 +123,14 @@ class DiscordTransport extends winston_transport_1.default {
         }
         callback();
     }
+    getColor(level) {
+        return this.colors && this.colors[level]
+            || DiscordTransport.DEFAULT_COLORS[level];
+    }
 }
 exports.default = DiscordTransport;
 /** Available colors for discord messages */
-DiscordTransport.COLORS = {
+DiscordTransport.DEFAULT_COLORS = {
     error: 14362664,
     warn: 16497928,
     info: 2196944,
