@@ -10,6 +10,12 @@ interface DiscordTransportOptions extends TransportStreamOptions {
   webhook: string;
   /** Meta data to be included inside Discord Message */
   defaultMeta: any;
+   /** Optional list of colors to use for discord messages */
+  colors?: Colors;
+}
+
+interface Colors {
+  [key: string]: number;
 }
 
 /**
@@ -31,8 +37,11 @@ export default class DiscordTransport extends Transport {
   /** Meta data to be included inside Discord Message */
   private defaultMeta: { [key: string]: string };
 
+  /** Custom list of colors to use for discord messages */
+  private colors: Colors;
+
   /** Available colors for discord messages */
-  private static COLORS: { [key: string]: number } = {
+  private static DEFAULT_COLORS: Colors = {
     error: 14362664, // #db2828
     warn: 16497928, // #fbbd08
     info: 2196944, // #2185d0
@@ -45,6 +54,7 @@ export default class DiscordTransport extends Transport {
     super(opts);
     this.webhook = opts.webhook;
     this.defaultMeta = opts.defaultMeta;
+    this.colors = opts.colors || DiscordTransport.DEFAULT_COLORS;
     this.initialize();
   }
 
@@ -104,7 +114,7 @@ export default class DiscordTransport extends Transport {
       content: undefined as string,
       embeds: [{
         description: info.message,
-        color: DiscordTransport.COLORS[info.level],
+        color: this.colors[info.level],
         fields: [] as any[],
         timestamp: new Date().toISOString(),
       }]

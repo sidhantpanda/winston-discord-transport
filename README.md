@@ -68,6 +68,36 @@ logger.log({
 });
 ```
 
+#### Optional color configuration
+If you are using custom log levels with winston, you can provide a map of levels and colors in the transport options:
+
+```javascript
+import winston from 'winston';
+import DiscordTransport from 'winston-discord-transport';
+
+const levelColors = {
+  emerg: 9315107,
+  alert: 14362664,
+  crit: 14362664,
+  error: 14362664,
+  warning: 16497928,
+  notice: 6559689,
+  info: 2196944,
+  debug: 2196944
+};
+
+const logger = winston.createLogger({
+  transports: [
+    new DiscordTransport({
+      webhook: 'https:/your/discord/webhook',
+      defaultMeta: { service: 'my_node_service' },
+      level: 'warn',
+      colors: levelColors
+    })
+  ],
+});
+```
+
 #### Screenshots
 ##### Error message
 <img src="https://i.ibb.co/nsQR12X/Screenshot-2019-09-18-at-7-04-59-PM.png" alt="Error message screenshot" >
