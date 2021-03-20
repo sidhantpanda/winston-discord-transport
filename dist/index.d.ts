@@ -9,7 +9,7 @@ interface DiscordTransportOptions extends TransportStreamOptions {
     defaultMeta: any;
 }
 /**
- * Nextabit's Discord Transport for winston
+ * Discord Transport for winston
  */
 export default class DiscordTransport extends Transport {
     /** Webhook obtained from Discord */
@@ -22,6 +22,7 @@ export default class DiscordTransport extends Transport {
     private initialized;
     /** Meta data to be included inside Discord Message */
     private defaultMeta;
+    private discordLogger;
     /** Available colors for discord messages */
     private static COLORS;
     constructor(opts: DiscordTransportOptions);

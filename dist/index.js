@@ -15,8 +15,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const winston_transport_1 = __importDefault(require("winston-transport"));
 const superagent_1 = __importDefault(require("superagent"));
 const os_1 = __importDefault(require("os"));
+const node_discord_logger_1 = __importDefault(require("node-discord-logger"));
 /**
- * Nextabit's Discord Transport for winston
+ * Discord Transport for winston
  */
 class DiscordTransport extends winston_transport_1.default {
     constructor(opts) {
@@ -102,6 +103,14 @@ class DiscordTransport extends winston_transport_1.default {
             }
         });
         this.webhook = opts.webhook;
+        this.discordLogger = new node_discord_logger_1.default({
+            hook: opts.webhook,
+            icon: process.env.ICON_URL,
+            serviceName: process.env.SERVICE_NAME,
+            errorHandler: err => {
+                console.error('error from discord', err);
+            }
+        });
         this.defaultMeta = opts.defaultMeta;
         this.initialize();
     }
